@@ -15,16 +15,17 @@ const PlayingCard = ({ suit, rank }) => {
       className="
         relative w-24 h-36 md:w-32 md:h-48 
         [perspective:1000px] // For 3D effect
-        hover:[transform:rotateY(180deg)] // Flip on hover
-        transition-all duration-500 ease-in-out // Smooth transition
+        [transform:rotateY(0deg)] // Explicitly start with front face visible
+        hover:[transform:rotateY(180deg)] // Flip to back on hover
+        transition-all duration-600 ease-in-out // Slightly longer for smoothness
         group
       "
     >
-      {/* Front Face */}
+      {/* Front Face - Higher z-index to ensure it's on top initially */}
       <div
         className="
-          absolute inset-0 
-          bg-parchment bg-[url('/vintage-paper.jpg')] bg-cover bg-center // Fallback to parchment color if image fails
+          absolute inset-0 z-10 // Prioritize front layer
+          bg-parchment bg-[url('/vintage-paper.jpg')] bg-cover bg-center 
           border-2 border-faded-gold rounded-lg shadow-md 
           flex flex-col justify-between p-2 
           text-center font-serif text-lg 
@@ -47,15 +48,15 @@ const PlayingCard = ({ suit, rank }) => {
           {rank} <br /> {suit}
         </div>
 
-        {/* Gold trim overlay - Ensures graphic element even without image */}
+        {/* Gold trim overlay */}
         <div className="absolute inset-0 border-2 border-dashed border-faded-gold opacity-50 rounded-lg pointer-events-none"></div>
       </div>
 
-      {/* Back Face */}
+      {/* Back Face - Lower z-index when not flipped */}
       <div
         className="
-          absolute inset-0 
-          bg-parchment bg-[url('/vintage-paper.jpg')] bg-cover bg-center // Fallback for back too
+          absolute inset-0 z-0 // Back layer behind front initially
+          bg-parchment bg-[url('/vintage-paper.jpg')] bg-cover bg-center 
           border-2 border-faded-gold rounded-lg shadow-md 
           flex items-center justify-center 
           text-center font-serif text-lg text-gray-600 
